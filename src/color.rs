@@ -2,61 +2,48 @@
 // Extended Colors 0-255
 // RGB Colors
 
-#[derive(Debug, Hash,PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
-pub struct Background(Value);
-
-impl std::fmt::Display for Background {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.to_ansi())
-    }
-}
-
-impl Background {
-    pub fn black(b: bool) -> Self {Self(Value::Iso { color: Iso::Black, bright: b })}
-    pub fn red(b: bool) -> Self {Self(Value::Iso { color: Iso::Red, bright: b })}
-    pub fn green(b: bool) -> Self {Self(Value::Iso { color: Iso::Green, bright: b })}
-    pub fn yellow(b: bool) -> Self {Self(Value::Iso { color: Iso::Yellow, bright: b })}
-    pub fn blue(b: bool) -> Self {Self(Value::Iso { color: Iso::Blue, bright: b })}
-    pub fn magenta(b: bool) -> Self {Self(Value::Iso { color: Iso::Magenta, bright: b })}
-    pub fn cyan(b: bool) -> Self {Self(Value::Iso { color: Iso::Cyan, bright: b })}
-    pub fn white(b: bool) -> Self {Self(Value::Iso { color: Iso::White, bright: b })}
-
-    pub fn iso(iso: Iso, bright: bool) -> Self {
-        Self(Value::Iso { color: iso, bright: bright })
-    }
-
-    pub fn extended(ext: u8) -> Self {
-        Self(Value::Extended(ext))
-    }
-
-    pub fn rgb(r: u8, g: u8, b: u8) -> Self {
-        Self(Value::Rgb { r: r, g: g, b: b })
-    }
-}
-
+////////////////////////
+//  Foreground Color  //
+////////////////////////
+ 
 #[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
-pub struct Foreground(Value);
+pub struct Foreground(Color);
 
 impl Foreground {
-    pub fn black(b: bool) -> Self {Self(Value::Iso { color: Iso::Black, bright: b })}
-    pub fn red(b: bool) -> Self {Self(Value::Iso { color: Iso::Red, bright: b })}
-    pub fn green(b: bool) -> Self {Self(Value::Iso { color: Iso::Green, bright: b })}
-    pub fn yellow(b: bool) -> Self {Self(Value::Iso { color: Iso::Yellow, bright: b })}
-    pub fn blue(b: bool) -> Self {Self(Value::Iso { color: Iso::Blue, bright: b })}
-    pub fn magenta(b: bool) -> Self {Self(Value::Iso { color: Iso::Magenta, bright: b })}
-    pub fn cyan(b: bool) -> Self {Self(Value::Iso { color: Iso::Cyan, bright: b })}
-    pub fn white(b: bool) -> Self {Self(Value::Iso { color: Iso::White, bright: b })}
+    pub fn new(value: Color) -> Self {
+        Self(value)
+    }
+
+    pub fn black(b: bool) -> Self {Self(Color::Iso { color: Iso::Black, bright: b })}
+    pub fn red(b: bool) -> Self {Self(Color::Iso { color: Iso::Red, bright: b })}
+    pub fn green(b: bool) -> Self {Self(Color::Iso { color: Iso::Green, bright: b })}
+    pub fn yellow(b: bool) -> Self {Self(Color::Iso { color: Iso::Yellow, bright: b })}
+    pub fn blue(b: bool) -> Self {Self(Color::Iso { color: Iso::Blue, bright: b })}
+    pub fn magenta(b: bool) -> Self {Self(Color::Iso { color: Iso::Magenta, bright: b })}
+    pub fn cyan(b: bool) -> Self {Self(Color::Iso { color: Iso::Cyan, bright: b })}
+    pub fn white(b: bool) -> Self {Self(Color::Iso { color: Iso::White, bright: b })}
 
     pub fn iso(iso: Iso, bright: bool) -> Self {
-        Self(Value::Iso { color: iso, bright: bright })
+        Self(Color::Iso { color: iso, bright: bright })
     }
 
     pub fn extended(ext: u8) -> Self {
-        Self(Value::Extended(ext))
+        Self(Color::Extended(ext))
     }
 
     pub fn rgb(r: u8, g: u8, b: u8) -> Self {
-        Self(Value::Rgb { r: r, g: g, b: b })
+        Self(Color::Rgb { r: r, g: g, b: b })
+    }
+
+    pub fn to_ansi(&self) -> String {
+        match &self.0 {
+            Color::Iso { color, bright } => {
+                format!("\x1b[{}{}m", if *bright { 9 } else { 3 }, color.to_char())
+            }
+            Color::Extended(val) => format!("\x1b[38;5;{}m", val),
+            Color::Rgb { r, g, b } => format!("\x1b[38;2;{};{};{}m", r, g, b),
+            Color::None => String::new()
+        }
     }
 }
 
@@ -66,11 +53,69 @@ impl std::fmt::Display for Foreground {
     }
 }
 
+
+////////////////////////
+//  Background Color  //
+////////////////////////
+
+#[derive(Debug, Hash,PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
+pub struct Background(Color);
+
+impl std::fmt::Display for Background {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.to_ansi())
+    }
+}
+
+impl Background {
+    pub fn new(value: Color) -> Self {
+        Self(value)
+    }
+
+    pub fn black(b: bool) -> Self {Self(Color::Iso { color: Iso::Black, bright: b })}
+    pub fn red(b: bool) -> Self {Self(Color::Iso { color: Iso::Red, bright: b })}
+    pub fn green(b: bool) -> Self {Self(Color::Iso { color: Iso::Green, bright: b })}
+    pub fn yellow(b: bool) -> Self {Self(Color::Iso { color: Iso::Yellow, bright: b })}
+    pub fn blue(b: bool) -> Self {Self(Color::Iso { color: Iso::Blue, bright: b })}
+    pub fn magenta(b: bool) -> Self {Self(Color::Iso { color: Iso::Magenta, bright: b })}
+    pub fn cyan(b: bool) -> Self {Self(Color::Iso { color: Iso::Cyan, bright: b })}
+    pub fn white(b: bool) -> Self {Self(Color::Iso { color: Iso::White, bright: b })}
+
+    pub fn iso(iso: Iso, bright: bool) -> Self {
+        Self(Color::Iso { color: iso, bright: bright })
+    }
+
+    pub fn extended(ext: u8) -> Self {
+        Self(Color::Extended(ext))
+    }
+
+    pub fn rgb(r: u8, g: u8, b: u8) -> Self {
+        Self(Color::Rgb { r: r, g: g, b: b })
+    }
+
+    pub fn to_ansi(&self) -> String {
+        match &self.0 {
+            Color::Iso { color, bright } => {
+                format!("\x1b[{}{}m", if *bright { 10 } else { 4 }, color.to_char())
+            }
+            Color::Extended(val) => format!("\x1b[48;5;{}m", val),
+            Color::Rgb { r, g, b } => format!("\x1b[48;2;{};{};{}m", r, g, b),
+            Color::None => String::new()
+        }
+    }
+}
+
+
+///////////////////
+//  Color Value  //
+///////////////////
+
 #[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
-pub enum Value {
+pub enum Color {
     Iso { color: Iso, bright: bool },
     Extended(u8),
     Rgb { r: u8, g: u8, b: u8 },
+    None
 }
 
 #[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
@@ -100,34 +145,4 @@ impl Iso {
     }
 }
 
-impl Foreground {
-    pub fn new(value: Value) -> Self {
-        Self(value)
-    }
 
-    pub fn to_ansi(&self) -> String {
-        match &self.0 {
-            Value::Iso { color, bright } => {
-                format!("\x1b[{}{}m", if *bright { 9 } else { 3 }, color.to_char())
-            }
-            Value::Extended(val) => format!("\x1b[38;5;{}m", val),
-            Value::Rgb { r, g, b } => format!("\x1b[38;2;{};{};{}m", r, g, b),
-        }
-    }
-}
-
-impl Background {
-    pub fn new(value: Value) -> Self {
-        Self(value)
-    }
-
-    pub fn to_ansi(&self) -> String {
-        match &self.0 {
-            Value::Iso { color, bright } => {
-                format!("\x1b[{}{}m", if *bright { 10 } else { 4 }, color.to_char())
-            }
-            Value::Extended(val) => format!("\x1b[48;5;{}m", val),
-            Value::Rgb { r, g, b } => format!("\x1b[48;2;{};{};{}m", r, g, b),
-        }
-    }
-}
