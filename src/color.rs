@@ -6,7 +6,7 @@
 //  Foreground Color  //
 ////////////////////////
  
-#[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Debug, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
 pub struct Foreground(Color);
 
 impl Foreground {
@@ -58,7 +58,7 @@ impl std::fmt::Display for Foreground {
 //  Background Color  //
 ////////////////////////
 
-#[derive(Debug, Hash,PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Debug, Copy, Hash,PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
 pub struct Background(Color);
 
 impl std::fmt::Display for Background {
@@ -110,7 +110,7 @@ impl Background {
 //  Color Value  //
 ///////////////////
 
-#[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Debug, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
 pub enum Color {
     Iso { color: Iso, bright: bool },
     Extended(u8),
@@ -118,7 +118,7 @@ pub enum Color {
     None
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
+#[derive(Debug, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, serde::Serialize, serde::Deserialize, Clone)]
 pub enum Iso {
     Black,
     Red,
