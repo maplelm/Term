@@ -3,16 +3,6 @@
 version = 4
 
 [[package]]
-name = "NTerm"
-version = "0.0.1"
-dependencies = [
- "bincode",
- "libc",
- "ron",
- "serde",
-]
-
-[[package]]
 name = "base64"
 version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -52,6 +42,16 @@ name = "libc"
 version = "0.2.176"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "58f929b4d672ea937a23a1ab494143d968337a5f47e56d0815df1e0890ddf174"
+
+[[package]]
+name = "my_term"
+version = "0.0.1"
+dependencies = [
+ "bincode",
+ "libc",
+ "ron",
+ "serde",
+]
 
 [[package]]
 name = "proc-macro2"
