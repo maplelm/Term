@@ -1,7 +1,18 @@
 [package]
 name = "NTerm"
-version = "0.1.0"
+version = "0.0.1"
+authors = ["Luke Maple"]
+description = "This crate was created as an alternative to Ncurses. The goal it feature parrity with Ncurses and easy use on all major platforms"
+license = "Apache-2.0"
+rust-version = "1.85.0"
 edition = "2024"
+readme = "README.md"
+homepage = ""
+repository = "https://github.com/maplelm/Term"
+keywords = ["terminal", "graphics", "TUI", "Ncurses"]
+categories = ["command-line-utilities"]
+exclude = [".gitignore", ".git/"]
+include = ["/src", "LICENSE", "README.md"]
 
 [dependencies]
 libc = "0.2"
