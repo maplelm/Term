@@ -1,5 +1,5 @@
 [package]
-name = "NTerm"
+name = "my_term"
 version = "0.0.1"
 authors = ["Luke Maple"]
 description = "This crate was created as an alternative to Ncurses. The goal it feature parrity with Ncurses and easy use on all major platforms"
